@@ -43,7 +43,7 @@ async def message_handler(message):
 @app.post("/")
 async def connect(request: Request):
     messages = await request.json()
-    logger.debug(messages)
+    print(messages)
     try:
         messages = await message_handler(messages)
         for message in messages:
