@@ -19,12 +19,28 @@ class FeishuChannel:
         # 对结果进行base64处理
         sign = base64.b64encode(hmac_code).decode('utf-8')
         headers = {'Content-Type': 'application/json;charset=utf-8'}
+
         body = {
-            "msg_type": "text",
+            "msg_type": "interactive",
             "timestamp": timestamp,
             "sign": sign,
-            "content": {
-                "text": message
+            "card": {
+                "elements": [
+                    {
+                        "tag": "markdown",
+                        "content": message
+                    },
+                    {
+                        "tag": "hr"
+                    }
+                ],
+                "header": {
+                    "template": "blue",
+                    "title": {
+                        "content": "告警来了",
+                        "tag": "plain_text"
+                    }
+                }
             }
         }
         httpx.post(self.bot_url, json=body, headers=headers)
