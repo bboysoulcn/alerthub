@@ -11,7 +11,35 @@ class FeishuChannel:
         self.bot_url = os.getenv("FEISHU_BOT_URL")
         self.sign = os.getenv("FEISHU_SIGN")
 
-    async def send_msg(self, message):
+    async def send_msg(self, alert):
+        # 多台机器的时候处理
+        status = alert["status"]
+        alertname = alert["labels"]["alertname"]
+        instance = alert["labels"]["instance"]
+        severity = alert["labels"]["severity"]
+        description = alert["annotations"]["description"]
+        summary = alert["annotations"]["summary"]
+        startsAt = alert["startsAt"]
+        endsAt = alert["endsAt"]
+        message = f"🚨**告警名称**: {alertname}\n" \
+                  f"📌**告警状态**:  {status}\n" \
+                  f"📍**告警实例**:  {instance}\n" \
+                  f"⚠️**告警等级**:  {severity}\n" \
+                  f"⏰**开始时间**:  {startsAt}\n" \
+                  f"⏳**结束时间**:  {endsAt}\n" \
+                  f"📋**告警摘要**:  {summary}\n" \
+                  f"📝**告警描述**:  {description}\n"
+
+        if status == "firing":
+            template = "red"
+            title_content = "🚨  告警来了  🚨"
+        elif status == "resolved":
+            template = "green"
+            title_content = "✅  告警恢复  ✅"
+        else:
+            template = "blue"
+            title_content = "不知道是什么状态的告警"
+
         timestamp = int(time.time())
         # 拼接timestamp和secret
         string_to_sign = '{}\n{}'.format(timestamp, self.sign)
@@ -35,9 +63,9 @@ class FeishuChannel:
                     }
                 ],
                 "header": {
-                    "template": "blue",
+                    "template": template,
                     "title": {
-                        "content": "告警来了",
+                        "content": title_content,
                         "tag": "plain_text"
                     }
                 }
