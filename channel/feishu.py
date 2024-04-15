@@ -21,21 +21,28 @@ class FeishuChannel:
         summary = alert["annotations"]["summary"]
         startsAt = alert["startsAt"]
         endsAt = alert["endsAt"]
-        message = f"🚨**告警名称**: {alertname}\n" \
-                  f"📌**告警状态**:  {status}\n" \
-                  f"📍**告警实例**:  {instance}\n" \
-                  f"⚠️**告警等级**:  {severity}\n" \
-                  f"⏰**开始时间**:  {startsAt}\n" \
-                  f"⏳**结束时间**:  {endsAt}\n" \
-                  f"📋**告警摘要**:  {summary}\n" \
-                  f"📝**告警描述**:  {description}\n"
 
         if status == "firing":
             template = "red"
             title_content = "🚨  告警来了  🚨"
+            message = f"🚨**告警名称**: {alertname}\n" \
+                      f"📌**告警状态**:  {status}\n" \
+                      f"📍**告警实例**:  {instance}\n" \
+                      f"⚠️**告警等级**:  {severity}\n" \
+                      f"⏰**开始时间**:  {startsAt}\n" \
+                      f"📋**告警摘要**:  {summary}\n" \
+                      f"📝**告警描述**:  {description}\n"
         elif status == "resolved":
             template = "green"
             title_content = "✅  告警恢复  ✅"
+            message = f"🚨**告警名称**: {alertname}\n" \
+                      f"📌**告警状态**:  {status}\n" \
+                      f"📍**告警实例**:  {instance}\n" \
+                      f"⚠️**告警等级**:  {severity}\n" \
+                      f"⏰**开始时间**:  {startsAt}\n" \
+                      f"⏳**结束时间**:  {endsAt}\n" \
+                      f"📋**告警摘要**:  {summary}\n" \
+                      f"📝**告警描述**:  {description}\n"
         else:
             template = "blue"
             title_content = "不知道是什么状态的告警"
